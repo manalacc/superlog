@@ -40,9 +40,9 @@ export default function RootLayout({
           >
           <SidebarProvider>
             <AppSidebar />
-            <main>
-              <SidebarTrigger />
-              <ModeToggle />
+            <SidebarTrigger />
+            <ModeToggle />
+            <main className="mx-auto w-full max-w-5xl px-6 flex flex-col flex-1">
               {children}
             </main>
           </SidebarProvider>
