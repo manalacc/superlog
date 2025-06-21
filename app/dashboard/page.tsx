@@ -2,17 +2,20 @@
 import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState, useCallback } from "react";
 import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog"
+  AddEntryForm,
+  AddEntryFormClose,
+  AddEntryFormContent,
+  AddEntryFormDescription,
+  AddEntryFormFooter,
+  AddEntryFormHeader,
+  AddEntryFormTitle,
+  AddEntryFormTrigger,
+} from "@/components/ui/AddEntryForm"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Calendar28 } from "@/components/ui/datepicker"
+import { Checkbox } from "@/components/ui/checkbox"
+import { Combobox } from "@/components/ui/combobox";
 
 type Post = {
   id: number;
@@ -35,6 +38,8 @@ export default function Page() {
   const [page, setPage] = useState(0); // dummyJSON uses skip, not page
   const [loading, setLoading] = useState(false);
   const loader = useRef<HTMLDivElement | null>(null);
+  const [date, setDate] = useState<Date>()
+  const [completed, setCompleted] = useState(false);
 
   // Fetch posts and products for the current page
   const fetchData = useCallback(async () => {
@@ -70,38 +75,50 @@ export default function Page() {
 
   return (
     <div className="flex flex-col items-center gap-8 py-8">
-      <Dialog>
+      <AddEntryForm>
         <form>
-          <DialogTrigger asChild>
-            <Button variant="outline">+</Button>
-          </DialogTrigger>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>Edit profile</DialogTitle>
-              <DialogDescription>
-                Make changes to your profile here. Click save when you&apos;re
-                done.
-              </DialogDescription>
-            </DialogHeader>
-            <div className="grid gap-4">
-              <div className="grid gap-3">
-                <Label htmlFor="name-1">Name</Label>
-                <Input id="name-1" name="name" defaultValue="Pedro Duarte" />
+          <AddEntryFormTrigger asChild>
+            <Button variant="outline">Add New Title</Button>
+          </AddEntryFormTrigger>
+          <AddEntryFormContent className="sm:max-w-[625px]">
+            <AddEntryFormHeader>
+              <AddEntryFormTitle>Add New Title</AddEntryFormTitle>
+            </AddEntryFormHeader>
+              <div className="grid grid-cols-4 gap-4">
+                <div className="flex flex-col gap-2">
+                  <Calendar28 label="Start Date" />
+                </div>
+                <div className={`flex flex-col gap-2 ${!completed ? "opacity-50 pointer-events-none" : ""}`}>
+                  <Calendar28 label="Finish Date" disabled={!completed} />
+                </div>
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <Label htmlFor="checkbox-1" className="text-center">Completed</Label>
+                  <Checkbox
+                    id="checkbox-1"
+                    checked={completed}
+                    onCheckedChange={checked => setCompleted(checked === true)}
+                  />
+                </div>
               </div>
-              <div className="grid gap-3">
-                <Label htmlFor="username-1">Username</Label>
-                <Input id="username-1" name="username" defaultValue="@peduarte" />
+              <div className="grid grid-cols-[150px_1fr] gap-4">
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="combobox-1">Type</Label>
+                  <Combobox/>
+                </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="name-1">Title</Label>
+                  <Input id="name-1" name="name" defaultValue="" />
+                </div>
               </div>
-            </div>
-            <DialogFooter>
-              <DialogClose asChild>
+            <AddEntryFormFooter>
+              <AddEntryFormClose asChild>
                 <Button variant="outline">Cancel</Button>
-              </DialogClose>
+              </AddEntryFormClose>
               <Button type="submit">Save changes</Button>
-            </DialogFooter>
-          </DialogContent>
+            </AddEntryFormFooter>
+          </AddEntryFormContent>
         </form>
-      </Dialog>
+      </AddEntryForm>
       {posts.map((post, idx) => (
         <div
           key={`${post.id}-${idx}`}
