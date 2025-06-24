@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label"
 import { Calendar28 } from "@/components/ui/datepicker"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Combobox } from "@/components/ui/combobox";
+import { Ranking } from "@/components/ui/ranking";
 
 type Post = {
   id: number;
@@ -80,18 +81,18 @@ export default function Page() {
           <AddEntryFormTrigger asChild>
             <Button variant="outline">Add New Title</Button>
           </AddEntryFormTrigger>
-          <AddEntryFormContent className="sm:max-w-[625px]">
+          <AddEntryFormContent className="sm:max-w-[700px]">
             <AddEntryFormHeader>
               <AddEntryFormTitle>Add New Title</AddEntryFormTitle>
             </AddEntryFormHeader>
-              <div className="grid grid-cols-4 gap-4">
+              <div className="grid grid-cols-[1fr_1fr_80px_1fr] gap-4">
                 <div className="flex flex-col gap-2">
                   <Calendar28 label="Start Date" />
                 </div>
                 <div className={`flex flex-col gap-2 ${!completed ? "opacity-50 pointer-events-none" : ""}`}>
                   <Calendar28 label="Finish Date" disabled={!completed} />
                 </div>
-                <div className="flex flex-col items-center justify-center gap-2">
+                <div className="flex flex-col gap-5 items-center ">
                   <Label htmlFor="checkbox-1" className="text-center">Completed</Label>
                   <Checkbox
                     id="checkbox-1"
@@ -99,8 +100,23 @@ export default function Page() {
                     onCheckedChange={checked => setCompleted(checked === true)}
                   />
                 </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="timespent" className="text-center">Time Spent (hours)</Label>
+                  <div className="relative">
+                    <Input
+                      type="number"
+                      id="timespent"
+                      name="timespent"
+                      min={0}
+                      step={0.1}
+                      placeholder="0.00"
+                      className="pr-12"
+                    />
+                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">hrs</span>
+                  </div>
+                </div>
               </div>
-              <div className="grid grid-cols-[150px_1fr] gap-4">
+              <div className="grid grid-cols-[150px_1fr_150px] gap-4">
                 <div className="flex flex-col gap-2">
                   <Label htmlFor="combobox-1">Type</Label>
                   <Combobox/>
@@ -109,12 +125,17 @@ export default function Page() {
                   <Label htmlFor="name-1">Title</Label>
                   <Input id="name-1" name="name" defaultValue="" />
                 </div>
+                <div className="flex flex-col gap-2">
+                  <Label htmlFor="ranking">Ranking</Label>
+                  <Ranking/>
+                </div>
               </div>
             <AddEntryFormFooter>
               <AddEntryFormClose asChild>
                 <Button variant="outline">Cancel</Button>
               </AddEntryFormClose>
               <Button type="submit">Save changes</Button>
+              <Button type="submit">Save changes go to Review</Button>
             </AddEntryFormFooter>
           </AddEntryFormContent>
         </form>

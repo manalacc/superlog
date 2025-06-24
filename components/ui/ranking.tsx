@@ -21,32 +21,32 @@ import {
 
 const list = [
   {
-    value: "vn",
-    label: "Visual Novel",
+    value: "s",
+    label: "S",
   },
   {
-    value: "anime",
-    label: "Anime",
+    value: "a",
+    label: "A",
   },
   {
-    value: "manga",
-    label: "Manga",
+    value: "b",
+    label: "B",
   },
   {
-    value: "game",
-    label: "Game",
+    value: "c",
+    label: "C",
   },
   {
-    value: "film",
-    label: "Film",
+    value: "d",
+    label: "D",
   },
   {
-    value: "film series",
-    label: "Film Series",
+    value: "f",
+    label: "F",
   },
 ]
 
-export function Combobox() {
+export function Ranking() {
   const [open, setOpen] = React.useState(false)
   const [value, setValue] = React.useState("")
 
@@ -55,21 +55,21 @@ export function Combobox() {
       <PopoverTrigger asChild>
         <Button
           variant="outline"
-          role="combobox"
+          role="ranking"
           aria-expanded={open}
           className="w-[150px] justify-between"
         >
           {value
             ? list.find((list) => list.value === value)?.label
-            : "Select Type..."}
+            : "Select Grade..."}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[200px] p-0">
         <Command>
-          <CommandInput placeholder="Select Type..." className="h-9" />
+          <CommandInput placeholder="Select Grade..." className="h-9" />
           <CommandList>
-            <CommandEmpty>No type found.</CommandEmpty>
+            <CommandEmpty>No Grade found.</CommandEmpty>
             <CommandGroup>
               {list.map((list) => (
                 <CommandItem
