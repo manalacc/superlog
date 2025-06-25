@@ -81,61 +81,81 @@ export default function Page() {
           <AddEntryFormTrigger asChild>
             <Button variant="outline">Add New Title</Button>
           </AddEntryFormTrigger>
-          <AddEntryFormContent className="sm:max-w-[700px]">
+          <AddEntryFormContent className="sm:max-w-[950px]">
             <AddEntryFormHeader>
               <AddEntryFormTitle>Add New Title</AddEntryFormTitle>
             </AddEntryFormHeader>
-              <div className="grid grid-cols-[1fr_1fr_80px_1fr] gap-4">
-                <div className="flex flex-col gap-2">
-                  <Calendar28 label="Start Date" />
-                </div>
-                <div className={`flex flex-col gap-2 ${!completed ? "opacity-50 pointer-events-none" : ""}`}>
-                  <Calendar28 label="Finish Date" disabled={!completed} />
-                </div>
-                <div className="flex flex-col gap-5 items-center ">
-                  <Label htmlFor="checkbox-1" className="text-center">Completed</Label>
-                  <Checkbox
-                    id="checkbox-1"
-                    checked={completed}
-                    onCheckedChange={checked => setCompleted(checked === true)}
+            <div className="grid grid-cols-[100px_1fr] gap-6">
+              {/* Image upload square column */}
+              <div className="flex flex-col items-center justify-center">
+                <Label htmlFor="entry-image" className="text-center mb-2">Thumbnail</Label>
+                <div className="w-24 h-24 border border-dashed border-gray-300 rounded-md flex items-center justify-center bg-gray-50 relative">
+                  <input
+                    type="file"
+                    id="entry-image"
+                    name="entry-image"
+                    accept="image/*"
+                    className="opacity-0 absolute w-full h-full cursor-pointer"
+                    title=""
                   />
+                  <span className="text-2xl text-gray-400 pointer-events-none absolute">+</span>
                 </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="timespent" className="text-center">Time Spent (hours)</Label>
-                  <div className="relative">
-                    <Input
-                      type="number"
-                      id="timespent"
-                      name="timespent"
-                      min={0}
-                      step={0.1}
-                      placeholder="0.00"
-                      className="pr-12"
+              </div>
+              {/* Main form fields */}
+              <div className="flex flex-col gap-5">
+                <div className="grid grid-cols-[1fr_1fr_80px_1fr] gap-4">
+                  <div className="flex flex-col gap-2">
+                    <Calendar28 label="Start Date" />
+                  </div>
+                  <div className={`flex flex-col gap-2 ${!completed ? "opacity-50 pointer-events-none" : ""}`}>
+                    <Calendar28 label="Finish Date" disabled={!completed} />
+                  </div>
+                  <div className="flex flex-col gap-4 items-center pt-1">
+                    <Label htmlFor="checkbox-1" className="text-center">Completed</Label>
+                    <Checkbox
+                      id="checkbox-1"
+                      checked={completed}
+                      onCheckedChange={checked => setCompleted(checked === true)}
                     />
-                    <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">hrs</span>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="timespent" className="text-center">Time Spent (hours)</Label>
+                    <div className="relative">
+                      <Input
+                        type="number"
+                        id="timespent"
+                        name="timespent"
+                        min={0}
+                        step={0.1}
+                        placeholder="0.00"
+                        className="pr-12"
+                      />
+                      <span className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none">hrs</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="grid grid-cols-[150px_1fr_150px] gap-4">
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="combobox-1">Type</Label>
+                    <Combobox/>
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="name-1">Title</Label>
+                    <Input id="name-1" name="name" defaultValue="" />
+                  </div>
+                  <div className="flex flex-col gap-2">
+                    <Label htmlFor="ranking">Ranking</Label>
+                    <Ranking/>
                   </div>
                 </div>
               </div>
-              <div className="grid grid-cols-[150px_1fr_150px] gap-4">
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="combobox-1">Type</Label>
-                  <Combobox/>
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="name-1">Title</Label>
-                  <Input id="name-1" name="name" defaultValue="" />
-                </div>
-                <div className="flex flex-col gap-2">
-                  <Label htmlFor="ranking">Ranking</Label>
-                  <Ranking/>
-                </div>
-              </div>
+            </div>
             <AddEntryFormFooter>
               <AddEntryFormClose asChild>
                 <Button variant="outline">Cancel</Button>
               </AddEntryFormClose>
               <Button type="submit">Save changes</Button>
-              <Button type="submit">Save changes go to Review</Button>
+              <Button type="submit">Save changes and go to Review</Button>
             </AddEntryFormFooter>
           </AddEntryFormContent>
         </form>
