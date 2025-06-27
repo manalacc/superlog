@@ -23,6 +23,7 @@ type Post = {
   title: string;
   body: string;
   userId: number;
+  image?: string; // Optional image property
 };
 
 type Product = {
@@ -42,18 +43,13 @@ export default function Page() {
   const [date, setDate] = useState<Date>()
   const [completed, setCompleted] = useState(false);
 
-  // Fetch posts and products for the current page
   const fetchData = useCallback(async () => {
-    setLoading(true);
-    const [postsRes, productsRes] = await Promise.all([
-      fetch(`https://dummyjson.com/posts?limit=${PAGE_SIZE}&skip=${page * PAGE_SIZE}`),
-      fetch(`https://dummyjson.com/products?limit=${PAGE_SIZE}&skip=${page * PAGE_SIZE}`),
-    ]);
-    const [postsData, productsData] = await Promise.all([postsRes.json(), productsRes.json()]);
-    setPosts((prev) => [...prev, ...postsData.posts]);
-    setProducts((prev) => [...prev, ...productsData.products]);
-    setLoading(false);
-  }, [page]);
+  setLoading(true);
+  const res = await fetch(`/api/entries`);
+  const data = await res.json();
+  setPosts(data); // assuming your API returns an array of entries
+  setLoading(false);
+}, []);
 
   useEffect(() => {
     fetchData();
@@ -166,14 +162,16 @@ export default function Page() {
       </AddEntryForm>
       {posts.map((post, idx) => (
         <div
-          key={`${post.id}-${idx}`}
+          key={post.id}
           className="w-full max-w-xl bg-white dark:bg-gray-900 rounded-xl shadow p-6 flex gap-4"
         >
-          <img
-            src={products[idx]?.images?.[0]}
-            alt={products[idx]?.title}
-            className="w-16 h-16 rounded-full object-cover"
-          />
+          {post.image && (
+            <img
+              src={post.image}
+              alt={post.title}
+              className="w-16 h-16 rounded-full object-cover"
+            />
+          )}
           <div>
             <h2 className="font-bold text-lg">{post.title}</h2>
             <p className="text-gray-700 dark:text-gray-300">{post.body}</p>
