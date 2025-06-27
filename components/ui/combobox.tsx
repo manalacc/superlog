@@ -46,9 +46,8 @@ const list = [
   },
 ]
 
-export function Combobox() {
+export function Combobox({ value, onChange }: { value?: string; onChange: (val: string) => void }) {
   const [open, setOpen] = React.useState(false)
-  const [value, setValue] = React.useState("")
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -76,7 +75,7 @@ export function Combobox() {
                   key={list.value}
                   value={list.value}
                   onSelect={(currentValue) => {
-                    setValue(currentValue === value ? "" : currentValue)
+                    onChange(currentValue === value ? "" : currentValue)
                     setOpen(false)
                   }}
                 >

@@ -32,13 +32,28 @@ function isValidDate(date: Date | undefined) {
   return !isNaN(date.getTime())
 }
 
-export function Calendar28({ label = "Add Date", disabled = false }: { label?: string; disabled?: boolean }) {
+export function Calendar28({
+  label = "Add Date",
+  disabled = false,
+  value,
+  onChange,
+}: {
+  label?: string;
+  disabled?: boolean;
+  value?: Date | null;
+  onChange?: (date: Date | null) => void;
+}) {
   const [open, setOpen] = React.useState(false)
-  const [date, setDate] = React.useState<Date | undefined>(
-    new Date()
+  const [month, setMonth] = React.useState<Date | undefined>(value ?? undefined)
+  const [inputValue, setInputValue] = React.useState(
+    value ? formatDate(value) : ""
   )
-  const [month, setMonth] = React.useState<Date | undefined>(date)
-  const [value, setValue] = React.useState(formatDate(date))
+
+  // Keep inputValue in sync with value prop
+  React.useEffect(() => {
+    setInputValue(value ? formatDate(value) : "")
+    setMonth(value ?? undefined)
+  }, [value])
 
   return (
     <div className="flex flex-col gap-3">
@@ -48,16 +63,16 @@ export function Calendar28({ label = "Add Date", disabled = false }: { label?: s
       <div className="relative flex gap-2">
         <Input
           id="date"
-          value={value}
+          value={inputValue}
           placeholder="Select a date"
           className="bg-background pr-10"
           disabled={disabled}
           onChange={(e) => {
-            const date = new Date(e.target.value)
-            setValue(e.target.value)
-            if (isValidDate(date)) {
-              setDate(date)
-              setMonth(date)
+            setInputValue(e.target.value)
+            const parsed = new Date(e.target.value)
+            if (isValidDate(parsed)) {
+              onChange?.(parsed)
+              setMonth(parsed)
             }
           }}
           onKeyDown={(e) => {
@@ -86,13 +101,12 @@ export function Calendar28({ label = "Add Date", disabled = false }: { label?: s
           >
             <Calendar
               mode="single"
-              selected={date}
+              selected={value ?? undefined}
               captionLayout="dropdown"
               month={month}
               onMonthChange={setMonth}
               onSelect={(date) => {
-                setDate(date)
-                setValue(formatDate(date))
+                onChange?.(date ?? null)
                 setOpen(false)
               }}
             />

@@ -9,7 +9,12 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  const data = await req.json();
-  const entry = await prisma.entry.create({ data });
-  return NextResponse.json(entry);
+  try {
+    const data = await req.json();
+    const entry = await prisma.entry.create({ data });
+    return NextResponse.json(entry);
+  } catch (err) {
+    console.error("API Error:", err);
+    return NextResponse.json({ error: String(err) }, { status: 500 });
+  }
 }

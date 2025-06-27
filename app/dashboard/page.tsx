@@ -137,7 +137,7 @@ export default function Page() {
                 <div className="grid grid-cols-[150px_1fr_150px] gap-4">
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="combobox-1">Type</Label>
-                    <Combobox/>
+                    <Combobox value={""} onChange={() => {}} />
                   </div>
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="name-1">Title</Label>
@@ -145,7 +145,7 @@ export default function Page() {
                   </div>
                   <div className="flex flex-col gap-2">
                     <Label htmlFor="ranking">Ranking</Label>
-                    <Ranking/>
+                    <Ranking value={""} onChange={() => {}} />
                   </div>
                 </div>
               </div>
