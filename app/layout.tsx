@@ -6,6 +6,7 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/app-sidebar";
 import { ThemeProvider } from "@/components/theme-provider";
 import { ModeToggle } from "@/components/mode-toggle";
+import { SessionProviderWrapper } from "@/components/SessionProviderWrapper";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -33,19 +34,21 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-          <SidebarProvider>
-            <AppSidebar />
-            <SidebarTrigger />
-            <ModeToggle />
-            <main className="mx-auto w-full max-w-5xl px-6 flex flex-col flex-1">
-              {children}
-            </main>
-          </SidebarProvider>
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <SessionProviderWrapper>
+            <SidebarProvider>
+              <AppSidebar />
+              <SidebarTrigger />
+              <ModeToggle />
+              <main className="mx-auto w-full max-w-5xl px-6 flex flex-col flex-1">
+                {children}
+              </main>
+            </SidebarProvider>
+          </SessionProviderWrapper>
         </ThemeProvider>
       </body>
     </html>

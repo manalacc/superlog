@@ -16,6 +16,7 @@ import { Calendar28 } from "@/components/ui/datepicker";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Combobox } from "@/components/ui/combobox";
 import { Ranking } from "@/components/ui/ranking";
+import { useSession } from "next-auth/react";
 
 type Post = {
   id: number;
@@ -30,6 +31,7 @@ type Post = {
 };
 
 export default function Page() {
+  const { data: session } = useSession();
   const [posts, setPosts] = useState<Post[]>([]);
   const [title, setTitle] = useState("");
   const [type, setType] = useState("");
@@ -46,11 +48,17 @@ export default function Page() {
   // Fetch entries from the API
   const fetchData = useCallback(async () => {
     setLoading(true);
-    const res = await fetch(`/api/entries`);
-    const data = await res.json();
-    setPosts(data);
+    const email = session?.user?.email;
+    // Only fetch if email is available (user is logged in)
+    if (email) {
+      const res = await fetch(`/api/entries?email=${encodeURIComponent(email)}`);
+      const data = await res.json();
+      setPosts(data);
+    } else {
+      setPosts([]); // No user, no posts
+    }
     setLoading(false);
-  }, []);
+  }, [session]);
 
   useEffect(() => {
     fetchData();
@@ -75,6 +83,8 @@ export default function Page() {
   const handleDialogSubmit = async () => {
     setLoading(true);
 
+    const email = session?.user?.email; // Get the user's email
+
     const entryData = {
       title,
       type,
@@ -83,7 +93,8 @@ export default function Page() {
       finishDate: finishDate ? finishDate.toISOString() : null,
       completed,
       timeSpent: Number(timeSpent),
-      image: null
+      image: null,
+      email, // Attach email here
     };
 
     const res = await fetch("/api/entries", {

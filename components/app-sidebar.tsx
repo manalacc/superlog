@@ -1,15 +1,17 @@
-import { Calendar, Home, Inbox, Search, Settings , Notebook} from "lucide-react"
+"use client";
+import { Home, Search, Settings, Notebook, Key, LogOut } from "lucide-react";
 
 import {
   Sidebar,
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+
+import { useSession, signIn, signOut } from "next-auth/react"
 
 // Menu items.
 const items = [
@@ -37,12 +39,15 @@ const items = [
 ]
 
 export function AppSidebar() {
+  const { data: session } = useSession()
+
   return (
     <Sidebar>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu>
+              {/* Main navigation items */}
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
@@ -53,6 +58,23 @@ export function AppSidebar() {
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  onClick={() => (session ? signOut() : signIn("google"))}
+                >
+                  {session ? (
+                    <>
+                      <LogOut />
+                      <span>Logout</span>
+                    </>
+                  ) : (
+                    <>
+                      <Key />
+                      <span>Login</span>
+                    </>
+                  )}
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
